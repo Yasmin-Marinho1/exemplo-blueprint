@@ -9,6 +9,15 @@ SENHA_ADMIN = '123'
 
 # ========== AUTENTICAÇÃO ==========
 
+def requer_login(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if 'usuario_logado' not in session:
+            flash('Você precisa estar logado.', 'error')
+            return redirect(url_for('admin.login'))
+        return f(*args, **kwargs)
+    return decorated_function
+
 @admin_bp.route('/login', methods=['GET', 'POST'])
 def login():
     """
@@ -40,15 +49,6 @@ def logout():
     return redirect(url_for('blog.index'))
 
 # ========== CRUD ==========
-
-def requer_login(f):
-    @wraps(f)
-    def decorated_function(*args, **kwargs):
-        if 'usuario_logado' not in session:
-            flash('Você precisa estar logado.', 'error')
-            return redirect(url_for('admin.login'))
-        return f(*args, **kwargs)
-    return decorated_function
 
 @admin_bp.route('/dashboard')
 @requer_login
