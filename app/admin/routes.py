@@ -29,6 +29,7 @@ def login():
     return render_template('admin/login.html')
 
 @admin_bp.route('/logout')
+@requer_login
 def logout():
     """
     Rota: GET /admin/logout
@@ -49,13 +50,13 @@ def requer_login(f):
         return f(*args, **kwargs)
     return decorated_function
 
-# Uso:
 @admin_bp.route('/dashboard')
 @requer_login
 def dashboard():
     return render_template('admin/dashboard.html', posts=posts)
 
 @admin_bp.route('/novo', methods=['GET', 'POST'])
+@requer_login
 def novo_post():
     """
     Rota: GET/POST /admin/novo
@@ -84,6 +85,7 @@ def novo_post():
     return render_template('admin/new_post.html')
 
 @admin_bp.route('/editar/<int:post_id>', methods=['GET', 'POST'])
+@requer_login
 def editar_post(post_id):
     """
     Rota: GET/POST /admin/editar/<id>
@@ -109,6 +111,7 @@ def editar_post(post_id):
     return render_template('admin/edit_post.html', post=post)
 
 @admin_bp.route('/deletar/<int:post_id>')
+@requer_login
 def deletar_post(post_id):
     """
     Rota: GET /admin/deletar/<id>
